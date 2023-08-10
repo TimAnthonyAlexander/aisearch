@@ -50,6 +50,6 @@ class SystemConfig
 
     public function save(): void
     {
-        file_put_contents(__DIR__ . '/../../config/config.json', json_encode($this->config));
+        file_put_contents(__DIR__ . '/../../config/config.json', json_encode($this->config, JSON_PRETTY_PRINT));
     }
 }
