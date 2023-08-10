@@ -27,13 +27,25 @@ class Search
 
         $command = $chatgpt->call($this->createCommandQuery());
 
-        $ouput = shell_exec($command);
+        $output = $this->executeCommand($command);
 
-        $selectedFileJob = $this->createFileSelector($ouput);
+        $selectedFileJob = $this->createFileSelector($output);
 
         $secondResponseText = $chatgpt->call($selectedFileJob);
 
         $this->results = $this->createResults($secondResponseText);
+    }
+
+    private function executeCommand(string $command): string
+    {
+        $command = json_decode($command, true, 512, JSON_THROW_ON_ERROR)[0] ?? die;
+        $output = shell_exec($command);
+
+        if ($output === null) {
+            throw new \RuntimeException('Command failed');
+        }
+
+        return $output;
     }
 
     private function createCommandQuery(): string
@@ -41,7 +53,7 @@ class Search
         $term = $this->query;
 
         $job = <<<TEXT
-Create a command that returns a list of files (only the paths, no other data) described by the following:
+Create a terminal command for macOS that returns a list of files (only the paths, no other data) described by the following:
 TEXT;
 
         return sprintf('%s: %s', $job, $term);
@@ -69,10 +81,39 @@ TEXT;
         $fileContents = '';
 
         foreach ($responseTextArray as $result) {
+            if (!file_exists($result)) {
+                continue;
+            }
+
             $fileContents .= 'File "' . $result . '":' . PHP_EOL;
             $fileContents .= 'SOF>>' . PHP_EOL;
-            $fileContents .= file_get_contents($result);
+            $fileContents .= $this->grabFileContents($result);
             $fileContents .= '<<EOF' . PHP_EOL;
+        }
+
+        return $fileContents;
+    }
+
+    private function grabFileContents(string $file): string
+    {
+        $fileContents = file_get_contents($file);
+
+        if ($fileContents === false) {
+            return '';
+        }
+
+        $allLines = explode(PHP_EOL, $fileContents);
+
+        $fileContents = '';
+
+        foreach ($allLines as $line) {
+            if (empty($line)) {
+                continue;
+            }
+
+            if (str_contains($line, $this->query)) {
+                $fileContents .= $line . PHP_EOL;
+            }
         }
 
         return $fileContents;
