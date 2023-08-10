@@ -66,6 +66,11 @@ while (true) {
         $result = $results[$selection];
 
         print "Opening $result...\n";
-        shell_exec("open \"$result\"");
+
+        match ($systemConfig->get('os')) {
+            'linux' => shell_exec("xdg-open $result"),
+            'mac' => shell_exec("open $result"),
+            'windows' => shell_exec("start $result"),
+        };
     }
 }
