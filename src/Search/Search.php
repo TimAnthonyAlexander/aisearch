@@ -25,13 +25,24 @@ class Search
 
         $chatgpt = new ChatGPT($this->systemConfig, $uniqid);
 
-        $responseText = $chatgpt->call($this->query);
+        $responseText = $chatgpt->call($this->createFirstQuery());
 
         $secondQuery = $this->createSecondQuery($responseText);
 
         $secondResponseText = $chatgpt->call($secondQuery);
 
         $this->results = $this->createResults($secondResponseText);
+    }
+
+    private function createFirstQuery(): string
+    {
+        $term = $this->query;
+
+        $job = <<<TEXT
+Create a command that returns a list of files described by the following term
+TEXT;
+
+        return sprintf('%s: %s', $job, $term);
     }
 
     private function createSecondQuery(string $responseText): string
