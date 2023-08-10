@@ -88,7 +88,7 @@ class Search
     {
         $term = $this->query;
 
-        $job = sprintf('Create a terminal command for %s that returns a list of files (only the paths, no other data). If the user does not give a path to where the files are located, try a home folder. Do not (!!) give a response that includes an example such as /path/to/file. Use recursive search and if necessary, start from the home folder. The entire response must be in a json string array with one single command as such: ["COMMAND"]. The search is described by the following:', $this->systemConfig->get('os'));
+        $job = sprintf('Create a terminal command for %s that returns a list of files (only the paths, no other data). If the user does not give a path to where the files are located, try a home folder. Do not (!!) give a response that includes an example such as /path/to/file. Use recursive search and if necessary, start from the home folder. The entire response must be in a json string array with one single command as such: ["COMMAND"]. You will then receive the list of files generated, some of their content and their path, and you will be able to choose the files that match the rest of the user input. The search is described by the following:', $this->systemConfig->get('os'));
 
         return sprintf('%s: %s', $job, $term);
     }
