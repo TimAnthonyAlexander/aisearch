@@ -146,8 +146,6 @@ TEXT;
             return '';
         }
 
-        $markers = [];
-
         $allLines = explode(PHP_EOL, $fileContents);
 
         $fileContents = '';
@@ -157,20 +155,10 @@ TEXT;
                 continue;
             }
 
-            if (str_contains($line, $this->query)) {
-                $markers[] = $number;
-            }
-        }
+            $fileContents .= $number . ': ' . $line . PHP_EOL;
 
-        $markers = array_unique($markers);
-
-        foreach ($markers as $marker) {
-            for ($i = $marker - 3; $i <= $marker + 3; $i++) {
-                if (!isset($allLines[$i])) {
-                    continue;
-                }
-
-                $fileContents .= $allLines[$i] . PHP_EOL;
+            if ($number > 10) {
+                break;
             }
         }
 
