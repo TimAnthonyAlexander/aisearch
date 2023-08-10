@@ -40,7 +40,7 @@ class Search
         $this->results = $this->createResults($secondResponseText);
     }
 
-    private function executeCommand(string $command): string
+    private function executeCommand(string $command): ?string
     {
         try {
             $command = array_values(json_decode($command, true, 512, JSON_THROW_ON_ERROR))[0] ?? die;
@@ -93,8 +93,12 @@ class Search
         return sprintf('%s: %s', $job, $term);
     }
 
-    private function createFileSelector(string $responseText): string
+    private function createFileSelector(?string $responseText): string
     {
+        if (empty($responseText)) {
+            throw new \RuntimeException('No files found');
+        }
+
         $fileContents = $this->readFileContents($responseText);
 
         $job = <<<TEXT
