@@ -11,7 +11,7 @@ use TimAlexander\Aisearch\SystemConfig\SystemConfig;
 
 class ChatGPT
 {
-    public string $model = 'gpt-4';
+    public string $model = 'gpt-3.5-turbo-16k';
     public string $url = 'https://api.openai.com/v1/chat/completions';
 
     private array $messages = [];

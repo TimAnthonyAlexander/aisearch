@@ -606,5 +606,69 @@
             ]
         },
         "response": "[\"\/Users\/tim.alexander\/aisearch\/search.php\", \"\/Users\/tim.alexander\/aisearch\/src\/Search\/Search.php\", \"\/Users\/tim.alexander\/aisearch\/src\/ChatGPT\/ChatGPT.php\"]"
+    },
+    {
+        "file": "64d4d4bd8a4dc6.76311624",
+        "data": {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a terminal command for macOS that returns a list of files (only the paths, no other data) described by the following:: PHP files in ~\/aisearch that have Search in their name"
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "[\"find ~\/aisearch -name '*Search*.php'\"]"
+    },
+    {
+        "file": "64d4d4bd8a4dc6.76311624",
+        "data": {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a terminal command for macOS that returns a list of files (only the paths, no other data) described by the following:: PHP files in ~\/aisearch that have Search in their name"
+                },
+                {
+                    "role": "assistant",
+                    "content": "[\"find ~\/aisearch -name '*Search*.php'\"]"
+                },
+                {
+                    "role": "user",
+                    "content": "I have found the following files and their contents for you. Please choose which (at the most 3) files represent the search best by only returning the file name in full path.: File \"\/Users\/tim.alexander\/aisearch\/src\/Search\/Search.php\":\nSOF>>\n<<EOF\n"
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "[\"\/Users\/tim.alexander\/aisearch\/src\/Search\/Search.php\"]"
     }
 ]
