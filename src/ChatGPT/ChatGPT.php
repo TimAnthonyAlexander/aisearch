@@ -17,10 +17,8 @@ class ChatGPT
 
     public function __construct(
         private SystemConfig $systemConfig,
-        private string $chatPersistenceId = null
+        private string $chatPersistenceId
     ) {
-        $this->chatPersistenceId = $chatPersistenceId ?? uniqid("", true);
-
         $this->loadMessages();
     }
 
