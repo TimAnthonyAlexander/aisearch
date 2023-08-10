@@ -34,16 +34,28 @@ class Search
 
         $secondResponseText = $chatgpt->call($selectedFileJob);
 
+        $count = count(json_decode($secondResponseText ?? '[]'));
+        print "AI selected $count files." . PHP_EOL;
+
         $this->results = $this->createResults($secondResponseText);
     }
 
     private function executeCommand(string $command): string
     {
         try {
-            $command = json_decode($command, true, 512, JSON_THROW_ON_ERROR)[0] ?? die;
+            $command = array_values(json_decode($command, true, 512, JSON_THROW_ON_ERROR))[0] ?? die;
         } catch (JsonException) {
             throw new \RuntimeException('Command failed: ' . $command);
             die;
+        }
+
+        print "AI generated command: " . $command . PHP_EOL;
+
+        print "Execute? (y/n): ";
+        $execute = trim(fgets(STDIN));
+
+        if ($execute !== 'y') {
+            throw new \RuntimeException('Did not execute: ' . $command);
         }
         $output = shell_exec($command);
 
@@ -58,7 +70,7 @@ class Search
     {
         $term = $this->query;
 
-        $job = sprintf(' Create a terminal command for %s that returns a list of files (only the paths, no other data) described by the following:', $this->systemConfig->get('os'));
+        $job = sprintf('Create a terminal command for %s that returns a list of files (only the paths, no other data). If the user does not give a path to where the files are located, try a home folder. Do not (!!) give a response that includes an example such as /path/to/file. Use recursive search and if necessary, start from the home folder. The entire response must be in a json string array with one single command as such: ["COMMAND"]. The search is described by the following:', $this->systemConfig->get('os'));
 
         return sprintf('%s: %s', $job, $term);
     }
@@ -84,16 +96,22 @@ TEXT;
 
         $fileContents = '';
 
+        $count = 0;
+
         foreach ($responseTextArray as $result) {
             if (!file_exists($result)) {
                 continue;
             }
+
+            $count++;
 
             $fileContents .= 'File "' . $result . '":' . PHP_EOL;
             $fileContents .= 'SOF>>' . PHP_EOL;
             $fileContents .= $this->grabFileContents($result);
             $fileContents .= '<<EOF' . PHP_EOL;
         }
+
+        print "Suggesting $count files. to AI" . PHP_EOL;
 
         return $fileContents;
     }
