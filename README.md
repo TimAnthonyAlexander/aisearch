@@ -1,5 +1,29 @@
 # AISearch
+Search through your computer (windows, macOS, or Linux) and find any file you need using ChatGPT.
+You need an OpenAI API key to use this.
+
 ## by Tim Anthony Alexander
+
+### Installation
+Dependencies:
+- PHP 8 or later
+- Composer (getcomposer.org)
+- Git
+- OpenAI API key
+
+Clone the repository and run `composer install` in the directory.
+Run `php search.php` once, enter your operating system (mac, windows, linux) and do a dry-run by entering anything.
+Nothing will happen as the config file will be generated.
+In the config file there are three keys: 
+- rules
+- openai_api_key
+- os
+
+OS will be set to the operating system you entered before.
+Rules should be set to this text, but you can modify it for better results:
+`The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further.`
+
+After adding these details, running the search by doing `php search.php` should work.
 
 This is only a proof-of-concept and should not be used.
 
