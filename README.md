@@ -19,3 +19,7 @@ After searching, you will have to wait a few seconds for the commands to run on 
 `Search: All pptx files older than 6 months`
 
 `Search: Php files in ~/aisearch with the name Search in them`
+
+### Screenshots:
+
+![Screenshot 1](https://raw.githubusercontent.com/TimAnthonyAlexander/aisearch/main/Screenshot%202023-08-10%20at%2015.18.58.png "Screenshot 1")
