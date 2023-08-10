@@ -48,7 +48,11 @@ class ChatGPT
         $rule->role = 'system';
         $rule->content = $rules;
 
-        $messages = array_merge([$rule], $this->messages);
+        $newMessage = new AIMessage();
+        $newMessage->role = 'user';
+        $newMessage->content = $text;
+
+        $messages = array_merge([$rule], $this->messages, [$newMessage]);
 
         $data = [
             'model' => $this->model,
@@ -91,6 +95,20 @@ class ChatGPT
             $decodedResponse = [];
         }
 
-        return '';
+        if (!isset($decodedResponse['choices'][0]['message']['content'])) {
+            return '';
+        } else {
+            $responseMessageText = $decodedResponse['choices'][0]['message']['content'];
+        }
+
+        $responseMessage = new AIMessage();
+        $responseMessage->role = 'assistant';
+        $responseMessage->content = $responseMessageText;
+
+        $this->messages = array_merge($messages, [$responseMessage]);
+
+        $this->writeMessages();
+
+        return $responseMessageText;
     }
 }
