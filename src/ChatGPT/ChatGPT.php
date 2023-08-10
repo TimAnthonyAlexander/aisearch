@@ -20,6 +20,8 @@ class ChatGPT
         private string $chatPersistenceId = null
     ) {
         $this->chatPersistenceId = $chatPersistenceId ?? uniqid("", true);
+
+        $this->loadMessages();
     }
 
     private function loadMessages(): void
