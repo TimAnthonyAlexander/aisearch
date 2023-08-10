@@ -9,6 +9,21 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $systemConfig = new SystemConfig();
 
+while (!$systemConfig->isset('os')) {
+    print "What operating system are you using (linux, mac, windows)? ";
+    $os = trim(fgets(STDIN));
+
+    if ($os === 'q') {
+        exit;
+    }
+
+    if (!in_array($os, ['linux', 'mac', 'windows'])) {
+        continue;
+    }
+
+    $systemConfig->set('os', $os);
+}
+
 while (true) {
     print "Search: ";
     $term = trim(fgets(STDIN));

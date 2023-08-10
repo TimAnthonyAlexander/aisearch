@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TimAlexander\Aisearch\Search;
 
+use JsonException;
 use TimAlexander\Aisearch\ChatGPT\ChatGPT;
 use TimAlexander\Aisearch\SystemConfig\SystemConfig;
 
@@ -38,7 +39,12 @@ class Search
 
     private function executeCommand(string $command): string
     {
-        $command = json_decode($command, true, 512, JSON_THROW_ON_ERROR)[0] ?? die;
+        try {
+            $command = json_decode($command, true, 512, JSON_THROW_ON_ERROR)[0] ?? die;
+        } catch (JsonException) {
+            throw new \RuntimeException('Command failed: ' . $command);
+            die;
+        }
         $output = shell_exec($command);
 
         if ($output === null) {
@@ -52,9 +58,7 @@ class Search
     {
         $term = $this->query;
 
-        $job = <<<TEXT
-Create a terminal command for macOS that returns a list of files (only the paths, no other data) described by the following:
-TEXT;
+        $job = sprintf(' Create a terminal command for %s that returns a list of files (only the paths, no other data) described by the following:', $this->systemConfig->get('os'));
 
         return sprintf('%s: %s', $job, $term);
     }
