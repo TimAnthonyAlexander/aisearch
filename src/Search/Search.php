@@ -25,27 +25,29 @@ class Search
 
         $chatgpt = new ChatGPT($this->systemConfig, $uniqid);
 
-        $responseText = $chatgpt->call($this->createFirstQuery());
+        $command = $chatgpt->call($this->createCommandQuery());
 
-        $secondQuery = $this->createSecondQuery($responseText);
+        $ouput = shell_exec($command);
 
-        $secondResponseText = $chatgpt->call($secondQuery);
+        $selectedFileJob = $this->createFileSelector($ouput);
+
+        $secondResponseText = $chatgpt->call($selectedFileJob);
 
         $this->results = $this->createResults($secondResponseText);
     }
 
-    private function createFirstQuery(): string
+    private function createCommandQuery(): string
     {
         $term = $this->query;
 
         $job = <<<TEXT
-Create a command that returns a list of files described by the following term
+Create a command that returns a list of files (only the paths, no other data) described by the following:
 TEXT;
 
         return sprintf('%s: %s', $job, $term);
     }
 
-    private function createSecondQuery(string $responseText): string
+    private function createFileSelector(string $responseText): string
     {
         $fileContents = $this->readFileContents($responseText);
 
@@ -58,7 +60,11 @@ TEXT;
 
     private function readFileContents(string $responseText): string
     {
-        $responseTextArray = json_decode($responseText, true);
+        if (empty($responseText)) {
+            return '';
+        }
+
+        $responseTextArray = explode(PHP_EOL, $responseText);
 
         $fileContents = '';
 

@@ -1,0 +1,208 @@
+[
+    {
+        "file": "64d4cef8295688.44762709",
+        "data": {
+            "model": "gpt-3.5-turbo-0301",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a command that returns a list of files described by the following term: Pptx"
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "Sorry, I don't know what to say."
+    },
+    {
+        "file": "64d4cef8295688.44762709",
+        "data": {
+            "model": "gpt-3.5-turbo-0301",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a command that returns a list of files described by the following term: Pptx"
+                },
+                {
+                    "role": "assistant",
+                    "content": "Sorry, I don't know what to say."
+                },
+                {
+                    "role": "user",
+                    "content": "I have found the following files and their contents for you. Please choose which (at the most 3) files represent the search best by only returning the file name in full path.: "
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "Sorry, I don't know what to say."
+    },
+    {
+        "file": "64d4cf9d16d5e3.50943966",
+        "data": {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a command that returns a list of files described by the following term: Hello"
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "Sorry, I don't know what to say."
+    },
+    {
+        "file": "64d4cf9d16d5e3.50943966",
+        "data": {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a command that returns a list of files described by the following term: Hello"
+                },
+                {
+                    "role": "assistant",
+                    "content": "Sorry, I don't know what to say."
+                },
+                {
+                    "role": "user",
+                    "content": "I have found the following files and their contents for you. Please choose which (at the most 3) files represent the search best by only returning the file name in full path.: "
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "Sorry, I don't know what to say."
+    },
+    {
+        "file": "64d4d12b897e46.59225406",
+        "data": {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a command that returns a list of files (only the paths, no other data) described by the following:: Pptx files"
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "Sorry, I don't know what to say."
+    },
+    {
+        "file": "64d4d1414709a1.02479172",
+        "data": {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a command that returns a list of files (only the paths, no other data) described by the following:: PPTX files"
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "Sorry, I don't know what to say."
+    },
+    {
+        "file": "64d4d15a425435.60599294",
+        "data": {
+            "model": "gpt-4",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "The user will be requesting either commands or a list of file names including the path. I want you to only return a valid json array of strings. Do not add any text outside of that json response as it is used further."
+                },
+                {
+                    "role": "user",
+                    "content": "Create a command that returns a list of files (only the paths, no other data) described by the following:: PPTX"
+                }
+            ],
+            "max_tokens": 2000,
+            "temperature": 0.5,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "stop": [
+                "\\r",
+                "\\n"
+            ]
+        },
+        "response": "Sorry, I don't know what to say."
+    }
+]

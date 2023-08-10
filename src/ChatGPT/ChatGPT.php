@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace TimAlexander\Aisearch\ChatGPT;
 
+use Exception;
 use JsonException;
 use TimAlexander\Aisearch\AIMessage\AIMessage;
 use TimAlexander\Aisearch\SystemConfig\SystemConfig;
 
 class ChatGPT
 {
-    public string $model = 'gpt-3.5-turbo-0301';
-    public string $url = 'https://api.openapi.com/v1/chat/completions';
+    public string $model = 'gpt-4';
+    public string $url = 'https://api.openai.com/v1/chat/completions';
 
     private array $messages = [];
 
@@ -67,23 +68,26 @@ class ChatGPT
 
         $jsonData = json_encode($data, JSON_THROW_ON_ERROR);
 
-        $headers = [
-            CURLOPT_URL => $this->url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $jsonData,
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . $this->systemConfig->get('openai_api_key', ''),
-            ],
-        ];
-
         $curl = curl_init();
 
-        curl_setopt_array($curl, $headers);
+        curl_setopt_array(
+            $curl, 
+            [
+                CURLOPT_URL => $this->url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $jsonData,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . $this->systemConfig->get('openai_api_key', ''),
+                ],
+            ]
+        );
 
         $response = curl_exec($curl);
+
+        $curlError = curl_error($curl);
 
         curl_close($curl);
 
@@ -96,7 +100,7 @@ class ChatGPT
         }
 
         if (!isset($decodedResponse['choices'][0]['message']['content'])) {
-            return '';
+            throw new Exception('Invalid response from OpenAI API: ' . $curlError . ' ' . $response);
         } else {
             $responseMessageText = $decodedResponse['choices'][0]['message']['content'];
         }
@@ -108,6 +112,17 @@ class ChatGPT
         $this->messages = array_merge($messages, [$responseMessage]);
 
         $this->writeMessages();
+
+        if (!file_exists(__DIR__ . '/requests.json')) {
+            file_put_contents(__DIR__ . '/requests.json', json_encode([]));
+        }
+        $allRequests = json_decode((string) file_get_contents(__DIR__ . '/requests.json'), true, 512, JSON_THROW_ON_ERROR);
+        $allRequests[] = [
+            'file' => $this->chatPersistenceId,
+            'data' => $data,
+            'response' => $responseMessageText,
+        ];
+        file_put_contents(__DIR__ . '/requests.json', json_encode($allRequests, JSON_PRETTY_PRINT));
 
         return $responseMessageText;
     }
