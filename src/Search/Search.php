@@ -49,21 +49,39 @@ class Search
             die;
         }
 
-        print "AI generated command: " . $command . PHP_EOL;
+        $firstPart = explode(' ', $command)[0];
+        $manPage = shell_exec('man ' . $firstPart);
 
-        print "Execute? (y/n): ";
+        print "AI generated command: " . $command . PHP_EOL;
+        print "You can decide upon these options: ".PHP_EOL;
+        print "y: Execute command".PHP_EOL;
+        print "n: Do not execute command".PHP_EOL;
+        print "m: Read the manual page for the command".PHP_EOL;
+        print "Action: ";
         $execute = trim(fgets(STDIN));
 
-        if ($execute !== 'y') {
-            throw new \RuntimeException('Did not execute: ' . $command);
+        if ($execute === 'y') {
+            return shell_exec($command);
         }
-        $output = shell_exec($command);
+        if ($execute === 'n') {
+            throw new \RuntimeException('Command failed');
+        }
+        if ($execute === 'm') {
+            print $manPage;
+            print "You can decide upon these options: ".PHP_EOL;
+            print "y: Execute command".PHP_EOL;
+            print "n: Do not execute command".PHP_EOL;
+            print "Action: ";
+            $execute = trim(fgets(STDIN));
 
-        if ($output === null) {
+            if ($execute === 'y') {
+                return shell_exec($command);
+            }
+
             throw new \RuntimeException('Command failed');
         }
 
-        return $output;
+        throw new \RuntimeException('Command failed');
     }
 
     private function createCommandQuery(): string
@@ -80,7 +98,7 @@ class Search
         $fileContents = $this->readFileContents($responseText);
 
         $job = <<<TEXT
-I have found the following files and their contents for you. Please choose which (at the most 3) files represent the search best by only returning the file name in full path.
+I have found the following files and these lines for you. Please choose which files represent the search best by only returning the file name in full path.
 TEXT;
 
         return sprintf('%s: %s', $job, $fileContents);
@@ -124,17 +142,31 @@ TEXT;
             return '';
         }
 
+        $markers = [];
+
         $allLines = explode(PHP_EOL, $fileContents);
 
         $fileContents = '';
 
-        foreach ($allLines as $line) {
+        foreach ($allLines as $number => $line) {
             if (empty($line)) {
                 continue;
             }
 
             if (str_contains($line, $this->query)) {
-                $fileContents .= $line . PHP_EOL;
+                $markers[] = $number;
+            }
+        }
+
+        $markers = array_unique($markers);
+
+        foreach ($markers as $marker) {
+            for ($i = $marker - 3; $i <= $marker + 3; $i++) {
+                if (!isset($allLines[$i])) {
+                    continue;
+                }
+
+                $fileContents .= $allLines[$i] . PHP_EOL;
             }
         }
 
